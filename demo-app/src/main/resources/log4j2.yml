@@ -1,0 +1,164 @@
+Configuration:
+  status: warn    #指定log4j本身的打印日志的级别
+  name: demo-app   #配置的名称
+  monitorInterval: 60   #自动重新配置的监测间隔时间，单位是秒
+  properties:
+    property:
+      -
+        name: log_home
+        value: logs/demo/demo-app
+      -
+        name: filename
+        value: demo-app.log
+  thresholdFilter:
+    level: debug
+  appenders:
+    Console:
+      name: console   #控制台节点名称
+      target: SYSTEM_OUT
+      ThresholdFilter:  #只接受程序中DEBUG级别的日志进行处理
+        level: DEBUG
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        Pattern: "%d %highlight{%p} %style{%T}{magenta} [%t] %style{%c{1.}}{cyan} : %m%xEx%n"
+    RollingRandomAccessFile:
+      -
+        name: rollingRandomDebug
+        fileName: ${log_home}/debug.log
+        filePattern: ${log_home}/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}--%i.log.gz
+        Filters:
+          ThresholdFilter:
+            -
+              level: DEBUG
+            -
+              level: INFO
+              onMatch: DENY
+              onMismatch: NEUTRAL
+        PatternLayout:
+          Pattern: "%d %p %T [%t] %c{1.} %L %M : %m%xEx%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 512MB
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+        DefaultRolloverStrategy:
+          max: 3
+      -
+        name: rollingRandomInfo
+        fileName: ${log_home}/info.log
+        filePattern: ${log_home}/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}--%i.log.gz
+        Filters:
+          ThresholdFilter:
+            -
+              level: INFO
+            -
+              level: WARN
+              onMatch: DENY
+              onMismatch: NEUTRAL
+        PatternLayout:
+          Pattern: "%d %p %T [%t] %c{1.} %L %M : %m%xEx%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 512MB
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+        DefaultRolloverStrategy:
+          max: 7
+      -
+        name: rollingRandomWarn
+        fileName: ${log_home}/warn.log
+        filePattern: ${log_home}/$${date:yyyy-MM}/warn-%d{yyyy-MM-dd}--%i.log.gz
+        Filters:
+          ThresholdFilter:
+            -
+              level: WARN
+            -
+              level: ERROR
+              onMatch: DENY
+              onMismatch: NEUTRAL
+        PatternLayout:
+          Pattern: "%d %p %T [%t] %c{1.} %L %M : %m%xEx%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 512MB
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+        DefaultRolloverStrategy:
+          max: 7
+      -
+        name: rollingRandomError
+        fileName: ${log_home}/error.log
+        filePattern: ${log_home}/$${date:yyyy-MM}/error-%d{yyyy-MM-dd}--%i.log.gz
+        Filters:
+          ThresholdFilter:
+            -
+              level: ERROR
+        PatternLayout:
+          Pattern: "%d %p %T [%t] %c{1.} %L %M : %m%xEx%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 512MB
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+        DefaultRolloverStrategy:
+          max: 7
+      -
+        name: druidSqlFile
+        fileName: ${log_home}/druid-sql.log
+        filePattern: ${log_home}/$${date:yyyy-MM}/druid-sql-%d{yyyy-MM-dd}--%i.log.gz
+        PatternLayout:
+          Pattern: "%d %p %T [%t] %c{1.} %M %L : %m%xEx%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: 512MB
+          TimeBasedTriggeringPolicy:
+            interval: 1
+            modulate: true
+        DefaultRolloverStrategy:
+          max: 7
+  Loggers:
+    logger:
+      -
+        name: com.guonanjun.demo.mapper
+        level: debug
+        additivity: false
+        AppenderRef:
+          ref: console
+#      -
+#        name: druid.sql.Statement
+#        level: debug
+#        additivity: false
+#        AppenderRef:
+#          -
+#            ref: druidSqlFile
+#          -
+#            ref: console
+#      -
+#        name: druid.sql.ResultSet
+#        level: debug
+#        additivity: false
+#        AppenderRef:
+#          -
+#            ref: druidSqlFile
+#          -
+#            ref: console
+    Root:
+      level: INFO
+      AppenderRef:
+        -
+          ref: console
+        -
+          ref: rollingRandomDebug
+        -
+          ref: rollingRandomInfo
+        -
+          ref: rollingRandomWarn
+        -
+          ref: rollingRandomError
+        -
+          ref: druidSqlFile
