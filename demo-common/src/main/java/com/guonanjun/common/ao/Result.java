@@ -1,15 +1,27 @@
 package com.guonanjun.common.ao;
 
+import java.io.Serializable;
+
 import com.guonanjun.common.enums.MsgCodeEnum;
 import lombok.Data;
 
 @Data
-public class Result<T> {
+public class Result<T> implements Serializable {
+
+    private static final long serialVersionUID = 6113652840778601363L;
 
     private boolean success;
     private int code;
     private String msg;
     private T data;
+
+    public static <T> Result<T> ofSuccess() {
+        Result<T> result = new Result<>();
+        result.setSuccess(true);
+        result.setCode(MsgCodeEnum.SUCCESS.getCode());
+        result.setMsg(MsgCodeEnum.SUCCESS.getMsg());
+        return result;
+    }
 
     public static <T> Result<T> ofSuccess(T data) {
         Result<T> result = new Result<>();

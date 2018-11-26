@@ -1,7 +1,7 @@
 package com.guonanjun.demo.service;
 
-import com.guonanjun.common.ao.Result;
 import com.guonanjun.demo.dto.UserDTO;
+import com.guonanjun.demo.exception.ServiceException;
 
 /**
  * 描述:
@@ -11,5 +11,7 @@ import com.guonanjun.demo.dto.UserDTO;
  */
 public interface UserService {
 
-    Result save(UserDTO userDTO);
+    void saveUser(UserDTO userDTO) throws ServiceException;
+
+    UserDTO getUserByUserName(String username) throws ServiceException;
 }

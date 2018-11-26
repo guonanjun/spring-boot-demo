@@ -1,6 +1,6 @@
 package com.guonanjun.demo.config;
 
-import com.guonanjun.util.SpringContextUtil;
+import com.guonanjun.demo.util.SpringContextUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

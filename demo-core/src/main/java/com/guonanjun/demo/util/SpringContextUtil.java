@@ -1,4 +1,4 @@
-package com.guonanjun.util;
+package com.guonanjun.demo.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

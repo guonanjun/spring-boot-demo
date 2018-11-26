@@ -1,7 +1,7 @@
 package com.guonanjun.demo.manager;
 
-import com.guonanjun.common.ao.Result;
 import com.guonanjun.demo.model.User;
+import com.guonanjun.demo.exception.DaoException;
 
 /**
  * 描述:
@@ -11,5 +11,8 @@ import com.guonanjun.demo.model.User;
  */
 public interface UserManager {
 
-    Result save(User user);
+    User save(User user) throws DaoException;
+
+    User selectByUsername(String username);
+
 }
